@@ -2,8 +2,14 @@ package com.example.wizard.ui.detail
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
+import androidx.lifecycle.Lifecycle
 import com.example.wizard.R
 import com.example.wizard.databinding.FragmentDetailBinding
 import com.example.wizard.model.Contacts
@@ -12,7 +18,7 @@ import com.example.wizard.utils.Intent
 import com.example.wizard.utils.State
 
 class DetailFragment : BaseFragment<Intent,
-        State>()  {
+        State>(), MenuProvider  {
 
     companion object {
         val TAG = this::class.simpleName
@@ -34,6 +40,8 @@ class DetailFragment : BaseFragment<Intent,
     ): View {
         _binding = FragmentDetailBinding.inflate(inflater, container, false)
         contact = arguments?.getParcelable(EXTRA_CONTACT_DETAIL)
+        val menuHost: MenuHost = requireActivity()
+        menuHost.addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
         return binding.root
     }
 
@@ -65,4 +73,11 @@ class DetailFragment : BaseFragment<Intent,
         }
     }
 
+    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+        menuInflater.inflate(R.menu.detail_menu, menu)
+    }
+
+    override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+        return false
+    }
 }

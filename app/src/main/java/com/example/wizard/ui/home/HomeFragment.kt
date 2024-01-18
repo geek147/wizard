@@ -2,8 +2,14 @@ package com.example.wizard.ui.home
 
 import android.os.Bundle
 import android.view.LayoutInflater
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.view.ViewGroup
+import androidx.core.view.MenuHost
+import androidx.core.view.MenuProvider
+import androidx.lifecycle.Lifecycle
 import androidx.recyclerview.widget.GridLayoutManager
 import com.example.wizard.R
 import com.example.wizard.databinding.FragmentHomeBinding
@@ -14,7 +20,7 @@ import com.example.wizard.utils.State
 import com.example.wizard.utils.ViewState
 
 class HomeFragment :  BaseFragment<Intent,
-        State>(){
+        State>(), MenuProvider{
 
     private var _binding: FragmentHomeBinding? = null
     private val binding get() = _binding!!
@@ -28,7 +34,8 @@ class HomeFragment :  BaseFragment<Intent,
     ): View {
 
         _binding = FragmentHomeBinding.inflate(inflater, container, false)
-
+        val menuHost: MenuHost = requireActivity()
+        menuHost.addMenuProvider(this, viewLifecycleOwner, Lifecycle.State.RESUMED)
         return binding.root
     }
 
@@ -105,5 +112,13 @@ class HomeFragment :  BaseFragment<Intent,
     override fun onDestroyView() {
         super.onDestroyView()
         _binding = null
+    }
+
+    override fun onCreateMenu(menu: Menu, menuInflater: MenuInflater) {
+        menuInflater.inflate(R.menu.main_menu, menu)
+    }
+
+    override fun onMenuItemSelected(menuItem: MenuItem): Boolean {
+        return false
     }
 }
